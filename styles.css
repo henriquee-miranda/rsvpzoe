@@ -1,0 +1,731 @@
+/* Estilos Gerais */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+
+body {
+    background-color: #E2E0DC; /* Cor de fallback */
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #E2E0DC;
+    overflow-x: hidden;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    position: relative;
+    z-index: 1;
+}
+
+.content-wrapper {
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 10;
+    margin-top: 300px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 25px;
+    font-weight: 800;
+    color: #B6433F;
+    text-shadow: 0 2px 50px #e99693;
+}
+
+/* Box da barra de busca */
+.search-box-container {
+    background-color: rgba(255, 255, 255, 0.85);
+    padding: 20px 25px;
+    border-radius: 20px;
+    width: 100%;
+    margin-bottom: 30px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    position: relative;
+    z-index: 100;
+}
+
+.search-instructions {
+    margin-top: 12px;
+    font-size: 14px;
+    line-height: 1.4;
+    color: #333;
+    text-align: center;
+    font-weight: 400;
+    position: relative;
+    max-width: 400px;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border-radius: 30px;
+    padding: 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 15px;
+    position: relative;
+    z-index: 5000;
+    transition: all 0.3s ease;
+}
+
+/* Remover o efeito de barra maior atrás */
+.search-box::before {
+    display: none;
+}
+
+.search-box.active {
+    border-radius: 30px 30px 0 0;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+input {
+    width: 100%;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 30px;
+    background-color: transparent;
+    font-size: 16px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+input:focus {
+    box-shadow: none;
+}
+
+.suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: white;
+    border-radius: 0 0 30px 30px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.25);
+    z-index: 6000;
+    max-height: 300px;
+    overflow-y: auto;
+    margin-top: -2px;
+    color: #333;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-top: 1px solid #f0f0f0;
+}
+
+.suggestions div {
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    color: #333;
+    font-weight: 500;
+}
+
+.suggestions div:hover {
+    background-color: #f0f0f0;
+    color: #000;
+}
+
+/* Estilo para quando as sugestões estão visíveis */
+.search-box.active input {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+/* Box de informações */
+.info-container {
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(255, 255, 255, 0.85);
+    padding: 25px;
+    border-radius: 10px;
+    width: 100%;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    color: #333;
+    position: relative;
+    z-index: 50;
+}
+
+.guest-info {
+    order: -1;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 22px;
+    border-radius: 8px;
+    margin-top: 0;
+    margin-bottom: 25px;
+    transition: all 0.3s ease;
+    color: #333;
+}
+
+.guest-info h2 {
+    margin-bottom: 12px;
+    color: #333;
+    font-weight: 600;
+}
+
+.guest-info p {
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.event-info {
+    padding: 0;
+    margin-bottom: 20px;
+    font-size: 15px;
+    line-height: 1.5;
+    color: #333;
+}
+
+.event-info p {
+    margin-bottom: 7px;
+    display: flex;
+    align-items: flex-start;
+}
+
+.event-info .emoji {
+    display: inline-block;
+    width: 22px;
+    margin-right: 8px;
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+.event-info strong, .event-info b {
+    font-weight: 600;
+    color: #000;
+}
+
+.event-info .address {
+    margin-top: -4px;
+    margin-left: 30px;
+    margin-bottom: 20px;
+}
+
+.event-info .address a {
+    color: #0078D7;
+    text-decoration: none;
+}
+
+.event-info .address a:hover {
+    text-decoration: underline;
+}
+
+.event-info p:nth-of-type(3) {
+    margin-top: 18px;
+}
+
+.event-info p:nth-of-type(5) {
+    margin-top: 18px;
+}
+
+.event-info p:nth-of-type(7) {
+    margin-top: 18px;
+    margin-bottom: 8px;
+}
+
+.event-info > p + p {
+    margin-top: 4px;
+}
+
+.event-info .gift-list {
+    list-style-type: disc !important;
+    padding-left: 30px;
+    margin-top: 7px;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.event-info .gift-list li {
+    margin-bottom: 6px;
+    padding-left: 0;
+    position: relative;
+    display: list-item !important;
+    color: #333;
+    list-style-position: outside;
+}
+
+.event-info .gift-list .emoji {
+    display: inline;
+    width: auto;
+    margin-left: 5px;
+    margin-right: 0;
+}
+
+.buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+    justify-content: center;
+}
+
+.btn {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    font-size: 15px;
+}
+
+.btn-confirm {
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+    color: white;
+    flex: 0.8;
+}
+
+.btn-decline {
+    background: linear-gradient(135deg, #f44336, #e53935);
+    color: white;
+    flex: 0.8;
+}
+
+.btn-search-again {
+    background: linear-gradient(135deg, #2196F3, #1e88e5);
+    color: white;
+    width: 80%;
+    margin: 15px auto 0;
+}
+
+.btn:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.25);
+    transition: all 0.2s ease;
+}
+
+.btn-confirm:hover {
+    box-shadow: 0 5px 12px rgba(76, 175, 80, 0.4);
+}
+
+.btn-decline:hover {
+    box-shadow: 0 5px 12px rgba(244, 67, 54, 0.4);
+}
+
+.btn-search-again:hover {
+    box-shadow: 0 5px 12px rgba(33, 150, 243, 0.4);
+}
+
+.hidden {
+    display: none;
+}
+
+#confirmation-message {
+    text-align: center;
+    margin: 20px 0;
+    font-weight: 500;
+    font-size: 18px;
+    color: #333;
+}
+
+.status-tag {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 20px; /* Formato de pílula */
+    color: white;
+    font-weight: bold;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.status-confirmed {
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+}
+
+.status-declined {
+    background: linear-gradient(135deg, #f44336, #e53935);
+}
+
+.status-pending {
+    background: linear-gradient(135deg, #FF9800, #FB8C00);
+}
+
+/* Garantir que a lista use bullets nativos do navegador */
+.event-info ul.gift-list {
+    list-style: disc !important;
+    margin-left: 0;
+    padding-left: 30px;
+}
+
+.event-info ul.gift-list li {
+    list-style: disc !important;
+    display: list-item !important;
+    padding-left: 5px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .content-wrapper {
+        margin-top: 450px;
+    }
+    
+    .search-box-container, .info-container {
+        padding: 20px;
+        width: 90%;
+    }
+    
+    .buttons {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 480px) {
+    .search-box-container, .info-container {
+        padding: 15px;
+    }
+    
+    input {
+        padding: 12px 15px;
+    }
+    
+    h1 {
+        font-size: 22px;
+    }
+}
+
+/* Estilos para o indicador de carregamento */
+.loading-spinner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.loading-spinner.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.loading-spinner:not(.hidden) {
+  opacity: 1;
+  visibility: visible;
+}
+
+.spinner {
+  width: 60px;
+  height: 60px;
+  border: 6px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  border-top-color: #4CAF50;
+  animation: spin 0.8s ease-in-out infinite;
+  margin-bottom: 15px;
+}
+
+.loading-spinner p {
+  color: #333;
+  font-size: 18px;
+  font-weight: 600;
+  margin-top: 10px;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 8px 16px;
+  border-radius: 20px; /* Formato de pílula */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Estilo para o body quando o loading está ativo */
+body.loading-active {
+  overflow: hidden;
+}
+
+/* Ajuste para garantir que o loading-spinner cubra toda a página */
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Estilos para o header de paralaxe com logo_main.png */
+.parallax-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+    transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+    background-color: #E2E0DC;
+    /* Remover a imagem de fundo anterior */
+    background-image: none;
+}
+
+/* Logo centralizada com ajustes personalizáveis */
+.logo-container {
+    position: relative;
+    width: 80%;
+    max-width: 600px;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.logo-img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+/* Background com animação */
+.background-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-image: url('assets/bg_01.jpg');
+    background-size: 100% auto;
+    background-position: bottom center;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    z-index: -2;
+    opacity: 1; /* Sempre visível */
+}
+
+/* Camada de cor sólida que vai animar */
+.color-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: #E2E0DC;
+    z-index: -1;
+}
+
+/* Animação da camada de cor sólida ao rolar */
+html.is-scrolling .color-overlay {
+    opacity: 0; /* Fica completamente transparente ao rolar */
+}
+
+/* Remover estado inicial de animação que não é mais necessário */
+.background-container.animate-in {
+    display: none;
+}
+
+/* Animação do logo quando rolar */
+html.is-scrolling .logo-container {
+    transform: translate(var(--logo-offset-x), calc(var(--logo-offset-y) - 30px)) scale(var(--logo-scale) * 0.95);
+    opacity: 0.8;
+}
+
+/* Indicador de rolagem - formato de pílula */
+.scroll-indicator {
+    position: absolute;
+    bottom: 150px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: rgb(71, 71, 71);
+    font-size: 23px;
+    opacity: 0.9;
+    padding: 8px 18px;
+    background-color: rgba(255, 255, 255, 0.25);
+    border-radius: 30px;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.2);
+    z-index: 50; /* Aumentado para garantir que fique acima */
+    transition: all 0.3s ease;
+    pointer-events: auto; /* Permitir cliques */
+    cursor: pointer;
+    animation: pulse 2s infinite ease-in-out;
+}
+
+/* Remover a animação de seta e usar texto */
+.scroll-indicator .arrow {
+    display: none;
+}
+
+/* Conteúdo principal */
+.main-content {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 2;
+    transform: translateY(calc(100% - 70px));
+    min-height: 100vh;
+    will-change: transform;
+    transition: transform 0.4s cubic-bezier(0.215, 0.610, 0.355, 1.000);
+    overflow-y: auto;
+    pointer-events: auto;
+    padding: 0;
+    background-color: transparent;
+}
+
+/* Container geral */
+.container {
+    width: 100%;
+    max-width: 768px;
+    margin: 0 auto;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    position: relative;
+    z-index: 1;
+}
+
+/* Wrapper de conteúdo */
+.content-wrapper {
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 10;
+    margin-top: 0;
+    padding: 30px 20px 60px;
+    background-color: rgba(255, 255, 255, 0.97);
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.2);
+    transition: transform 0.4s ease-out, opacity 0.4s ease-out;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 25px;
+    font-weight: 800;
+    color: #B6433F;
+    text-shadow: 0 2px 50px #e99693;
+}
+
+/* Ajuste para os cards internos */
+.search-box-container, .info-container {
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 15px;
+    margin-bottom: 20px;
+    width: 100%;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Remover sombras e bordas redundantes */
+.info-container {
+    box-shadow: none;
+    background-color: transparent;
+    padding: 0;
+}
+
+.guest-info {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.event-info {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+/* Efeito de animação do scroll indicator */
+@keyframes pulse {
+    0% {
+        transform: translateX(-50%) scale(1);
+    }
+    50% {
+        transform: translateX(-50%) scale(1.05);
+    }
+    100% {
+        transform: translateX(-50%) scale(1);
+    }
+}
+
+.scroll-indicator {
+    animation: pulse 2s infinite ease-in-out;
+}
+
+/* Pequeno ajuste para dispositivos móveis */
+@media (max-width: 768px) {
+    .main-content {
+        transform: translateY(calc(100% - 45px));
+    }
+    
+    .scroll-indicator {
+        bottom: 55px;
+        font-size: 12px;
+        padding: 6px 14px;
+    }
+}
+
+/* Aprimoramentos para o efeito de paralaxe */
+html {
+    scroll-behavior: smooth;
+    height: 100%;
+}
+
+/* Pequeno ajuste para dispositivos móveis */
+@media (max-width: 768px) {
+    .main-content {
+        margin-top: calc(100vh - 40px); /* Mostra apenas 40px em dispositivos móveis */
+        padding-top: 30px;
+    }
+    
+    .scroll-indicator {
+        bottom: 70px; /* Ajustado para mobile */
+    }
+    
+    .content-wrapper {
+        margin-top: 20px;
+    }
+    
+    h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+}
+
+/* Remover esta regra conflitante */
+/* Estilo quando o usuário começa a rolar */
+/* html.is-scrolling .background-container {
+    transform: translateY(0);
+    opacity: 1;
+} */ 

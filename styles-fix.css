@@ -1,0 +1,125 @@
+/* Backgrounds e efeitos paralaxe */
+/* Background com imagem fixa - fundo de tudo */
+.background-container {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    background-image: url('assets/bg_01.jpg') !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    z-index: -10 !important; /* Abaixo de tudo */
+    opacity: 1 !important;
+    pointer-events: none !important;
+    display: block !important;
+    visibility: visible !important;
+    transform: translateY(30px) !important; /* Posição inicial: um pouco abaixo */
+    transition: transform 1s cubic-bezier(0.215, 0.610, 0.355, 1.000) !important;
+    will-change: transform !important;
+}
+
+/* Animação do background quando rolar */
+html.is-scrolling .background-container {
+    transform: translateY(0) !important; /* Move para a posição final */
+}
+
+/* Remover a borda de debug */
+.background-container::after {
+    display: none !important;
+}
+
+/* Header - é este que deve ter a animação */
+.parallax-header {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100vh !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    z-index: 10 !important; /* Aumentado para ficar acima do card */
+    background-color: #E2E0DC !important; /* Cor sólida inicial */
+    transition: opacity 0.8s cubic-bezier(0.215, 0.610, 0.355, 1.000) !important;
+    will-change: opacity !important;
+}
+
+/* Estado de animação do header quando rolar */
+html.is-scrolling .parallax-header {
+    opacity: 0 !important; /* Header fica transparente, revelando o bg_01.jpg */
+}
+
+/* Indicador de rolagem - precisa ficar acima de tudo */
+.scroll-indicator {
+    z-index: 20 !important; /* Ajustado para ficar acima do header */
+}
+
+/* A camada de color-overlay não é mais necessária */
+.color-overlay {
+    display: none !important;
+}
+
+/* Animação do logo quando rolar */
+html.is-scrolling .logo-container {
+    transform: translate(var(--logo-offset-x), -100vh) scale(var(--logo-scale)) !important;
+    opacity: 0 !important;
+    transition: transform 0.8s cubic-bezier(0.215, 0.610, 0.355, 1.000), 
+                opacity 0.8s cubic-bezier(0.215, 0.610, 0.355, 1.000) !important;
+}
+
+/* Estado inicial do logo */
+.logo-container {
+    position: relative !important;
+    width: 80% !important;
+    max-width: 600px !important;
+    height: auto !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    z-index: 2 !important; /* Acima do header */
+    /* Propriedades personalizáveis para ajustar a posição da logo */
+    --logo-offset-x: 0px;
+    --logo-offset-y: 0px;
+    --logo-scale: 1;
+    transform: translate(var(--logo-offset-x), var(--logo-offset-y)) scale(var(--logo-scale)) !important;
+    transition: transform 0.8s cubic-bezier(0.215, 0.610, 0.355, 1.000),
+                opacity 0.8s cubic-bezier(0.215, 0.610, 0.355, 1.000) !important;
+}
+
+/* Ajustes do card principal para corrigir a sombra e cantos arredondados */
+.content-wrapper {
+    border-radius: 20px !important; /* Cantos arredondados em todos os lados */
+    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.15) !important; /* Sombra ajustada */
+    overflow: visible !important; /* Evita que a sombra seja cortada */
+    margin-bottom: 50px !important; /* Espaço embaixo para mostrar a sombra e o arredondamento */
+    margin-top: 10px !important; /* Pequena margem extra no topo para evitar corte */
+    position: relative !important; /* Estabelecer contexto de posicionamento */
+    z-index: 5 !important; /* Aumentado para garantir que fique acima do background */
+}
+
+/* Ajuste do container principal para garantir que a sombra seja visível e respeitar a margem superior */
+.main-content {
+    overflow: visible !important; /* Permite que a sombra seja visível mesmo fora do container */
+    padding-bottom: 50px !important; /* Adiciona espaço para mostrar a sombra inferior */
+    overflow-y: auto !important; /* Permite rolagem do conteúdo interno */
+    transition: transform 0.6s cubic-bezier(0.215, 0.610, 0.355, 1.000) !important; /* Transição mais lenta */
+    height: 100vh !important; /* Altura fixa para permitir rolagem interna */
+    overflow-x: hidden !important; /* Evitar rolagem horizontal */
+    will-change: transform !important; /* Otimização para animações */
+}
+
+/* Quando estiver completamente visível com margem superior fixa */
+.main-content.fully-visible {
+    transform: translateY(80px) !important; /* Margem fixa no topo (ajuste conforme necessário) */
+    max-height: calc(100vh - 80px) !important; /* Altura máxima considerando a margem superior */
+    overflow-y: auto !important; /* Ativa a rolagem interna */
+    box-shadow: none !important; /* Remove a sombra entre o header e o card */
+}
+
+/* Adiciona espaço de rolagem para o conteúdo interno */
+.container {
+    padding-bottom: 100px !important; /* Espaço extra no final para permitir rolagem */
+    min-height: 100vh !important; /* Garantir altura mínima para permitir rolagem */
+} 

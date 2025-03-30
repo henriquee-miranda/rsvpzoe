@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RSVP Aniversário de 1 Ano</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles-fix.css">
+</head>
+<body>
+    <!-- Background com animação e camada de cor -->
+    <div class="background-container"></div>
+    <div class="color-overlay"></div>
+    
+    <!-- Header com efeito de paralaxe -->
+    <div class="parallax-header">
+        <!-- Logo com posição ajustável -->
+        <div class="logo-container">
+            <img src="assets/logo_main.png" alt="O Bosque da Zoe" class="logo-img">
+        </div>
+        
+        <!-- Indicador de rolagem em formato de pílula -->
+        <div class="scroll-indicator">
+            Confirme Sua Presença
+        </div>
+    </div>
+
+    <!-- Conteúdo principal que aparece ao rolar -->
+    <div class="main-content">
+        <div class="container">
+            <div class="content-wrapper">
+                <!-- Título fora dos boxes -->
+                <h1>Confirme sua presença</h1>
+                
+                <!-- Box da barra de busca -->
+                <div class="search-box-container">
+                    <div class="search-box">
+                        <input type="text" id="search-input" placeholder="Digite seu nome...">
+                        <div id="suggestions" class="suggestions"></div>
+                    </div>
+                    <p class="search-instructions">Digite seu nome para confirmar sua presença!</p>
+                    <p class="search-instructions"><strong>Lembre-se de confirmar também para seus acompanhantes 😊</strong></p>
+                </div>
+
+                <!-- Box das informações do evento -->
+                <div class="info-container">
+                    <!-- Informações do convidado - Agora vem primeiro -->
+                    <div id="guest-info" class="guest-info hidden">
+                        <h2 id="guest-name"></h2>
+                        <p id="guest-status" class="status-tag"></p>
+                        <div class="buttons">
+                            <button id="confirm-yes" class="btn btn-confirm">Confirmar Presença</button>
+                            <button id="confirm-no" class="btn btn-decline">Não Poderei Comparecer</button>
+                        </div>
+                        <p id="confirmation-message" class="hidden"></p>
+                        <button id="search-again" class="btn btn-search-again hidden">Buscar Novamente</button>
+                    </div>
+                    
+                    <!-- Informações do evento - Agora vem depois -->
+                    <div class="event-info">
+                        <p><span class="emoji">📅</span> <b>Quarta-Feira, 07 de maio</b></p>
+                        <p><span class="emoji">⌚</span> <b>18h -</b> Evite atrasos. Respeite o horário dos bebês.</p>
+                        
+                        <p><span class="emoji">📌</span> <b>Festeja Park</b></p>
+                        <p class="address"><a href="https://maps.google.com/?q=Av. Gentil Bittencourt, 883">Av. Gentil Bittencourt, 883</a></p>
+                        
+                        <p><span class="emoji">👚</span> Tamanho de roupinhas: <b>18-24 meses</b></p>
+                        <p><span class="emoji">👠</span> Tamanho de sapatinhos: <b>21</b></p>
+                        
+                        <p><span class="emoji">🎁</span> <b>Sugestões de presentes:</b></p>
+                        <ul class="gift-list">
+                            <li>Brinquedos Musicais e Instrumentos 🎵</li>
+                            <li>Brinquedos de madeira 🪵</li>
+                            <li>Brinquedos educativos 🧸</li>
+                            <li>Livros educativos 📖</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Elemento de carregamento fora do container principal -->
+    <div id="loading-spinner" class="loading-spinner hidden">
+        <div class="spinner"></div>
+        <p>Processando, aguarde...</p>
+    </div>
+
+    <script src="https://apis.google.com/js/api.js"></script>
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.querySelector('.search-box input');
+            const suggestionsDiv = document.querySelector('#suggestions');
+            const searchBox = document.querySelector('.search-box');
+            const mainContent = document.querySelector('.main-content');
+            const scrollIndicator = document.querySelector('.scroll-indicator');
+            const parallaxHeader = document.querySelector('.parallax-header');
+            const backgroundContainer = document.querySelector('.background-container');
+            const colorOverlay = document.querySelector('.color-overlay');
+            const logoContainer = document.querySelector('.logo-container');
+            let touchStartY = 0;
+            let touchMoveY = 0;
+            let isDragging = false;
+
+            // Teste de animação direto no console
+            console.log("Testando animação de background");
+            console.log("backgroundContainer:", backgroundContainer);
+            console.log("colorOverlay:", colorOverlay);
+            
+            // Verificar se a imagem de fundo está carregando
+            const bgImage = new Image();
+            bgImage.onload = function() {
+                console.log("Imagem de fundo carregada com sucesso:", bgImage.src);
+            };
+            bgImage.onerror = function() {
+                console.error("Erro ao carregar a imagem de fundo:", bgImage.src);
+            };
+            bgImage.src = "assets/bg_01.jpg";
+            
+            // Verificar estilos computados
+            setTimeout(() => {
+                if (backgroundContainer) {
+                    const computedStyle = window.getComputedStyle(backgroundContainer);
+                    console.log("Background-image computado:", computedStyle.backgroundImage);
+                    console.log("Z-index computado:", computedStyle.zIndex);
+                    console.log("Opacity computada:", computedStyle.opacity);
+                }
+            }, 500);
+            
+            // Função para ajustar a posição da logo
+            window.adjustLogo = function(x, y, scale) {
+                logoContainer.style.setProperty('--logo-offset-x', x + 'px');
+                logoContainer.style.setProperty('--logo-offset-y', y + 'px');
+                logoContainer.style.setProperty('--logo-scale', scale);
+            };
+            
+            // Ajuste inicial da logo
+            window.adjustLogo(0, 0, 1);
+            
+            // Função para mostrar/esconder conteúdo
+            function toggleMainContent() {
+                if (document.documentElement.classList.contains('is-scrolling')) {
+                    // Esconder conteúdo
+                    document.documentElement.classList.remove('is-scrolling');
+                    mainContent.classList.remove('fully-visible');
+                    mainContent.style.transform = 'translateY(calc(100% - 55px))';
+                    
+                    // Mostrar o header (opacidade 1)
+                    parallaxHeader.style.setProperty('opacity', '1', 'important');
+                    
+                    // Resetar o background para posição inicial (um pouco abaixo)
+                    backgroundContainer.style.setProperty('transform', 'translateY(30px)', 'important');
+                    
+                    // Resetar o logo para visível e na posição original
+                    logoContainer.style.setProperty('transform', 
+                        `translate(var(--logo-offset-x), var(--logo-offset-y)) scale(var(--logo-scale))`, 'important');
+                    logoContainer.style.setProperty('opacity', '1', 'important');
+                    
+                    console.log("Resetando animações - escondendo conteúdo");
+                } else {
+                    // Mostrar conteúdo
+                    document.documentElement.classList.add('is-scrolling');
+                    mainContent.style.transform = 'translateY(0)';
+                    setTimeout(() => {
+                        mainContent.classList.add('fully-visible');
+                    }, 200);
+                    
+                    // Esconder o header (opacidade 0) para revelar a imagem de fundo
+                    parallaxHeader.style.setProperty('opacity', '0', 'important');
+                    
+                    // Mover o background para a posição final
+                    backgroundContainer.style.setProperty('transform', 'translateY(0)', 'important');
+                    
+                    // Animar o logo para sair da tela e desaparecer
+                    logoContainer.style.setProperty('transform', 'translateY(-100vh)', 'important');
+                    logoContainer.style.setProperty('opacity', '0', 'important');
+                    
+                    console.log("Aplicando animações - mostrando conteúdo");
+                }
+            }
+            
+            // Revelação do conteúdo ao clicar no indicador
+            scrollIndicator.addEventListener('click', function(e) {
+                e.preventDefault();
+                toggleMainContent();
+            });
+            
+            // Permitir cliques no indicador
+            scrollIndicator.style.pointerEvents = 'auto';
+            
+            // Função para lidar com rolagem
+            window.addEventListener('scroll', function() {
+                const scrollPosition = window.scrollY;
+                
+                // Controla visibilidade do indicador
+                if (scrollPosition > 30) {
+                    document.documentElement.classList.add('is-scrolling');
+                    scrollIndicator.style.opacity = '0';
+
+                    // Adiciona a classe fully-visible para fixar a margem superior
+                    if (scrollPosition > 100 && !mainContent.classList.contains('fully-visible')) {
+                        mainContent.classList.add('fully-visible');
+                    }
+                } else {
+                    if (scrollPosition < 10) {
+                        document.documentElement.classList.remove('is-scrolling');
+                        mainContent.classList.remove('fully-visible');
+                        scrollIndicator.style.opacity = '0.9';
+                    }
+                }
+                
+                // Ajusta opacidade do header baseado na rolagem
+                if (scrollPosition > 0) {
+                    const opacityValue = Math.max(0, 1 - (scrollPosition / 300));
+                    parallaxHeader.style.setProperty('opacity', opacityValue, 'important');
+                    
+                    // Ajusta posição da imagem de fundo com movimento mais sutil
+                    const offsetY = Math.max(0, 30 - (scrollPosition / 10));
+                    backgroundContainer.style.setProperty('transform', `translateY(${offsetY}px)`, 'important');
+                } else {
+                    parallaxHeader.style.setProperty('opacity', '1', 'important');
+                    backgroundContainer.style.setProperty('transform', 'translateY(30px)', 'important');
+                }
+            });
+            
+            // Corrigir o evento wheel para garantir que funcione no PC
+            window.addEventListener('wheel', function(e) {
+                // Se rolar para baixo (deltaY positivo)
+                if (e.deltaY > 0) {
+                    // Revelar conteúdo apenas se ainda não estiver revelado
+                    if (!document.documentElement.classList.contains('is-scrolling')) {
+                        e.preventDefault();
+                        document.documentElement.classList.add('is-scrolling');
+                        
+                        // Aplicar a transformação do conteúdo principal
+                        mainContent.style.transform = 'translateY(0)';
+                        setTimeout(() => {
+                            mainContent.classList.add('fully-visible');
+                        }, 200);
+                        
+                        // Esconder o header (opacidade 0) para revelar a imagem de fundo
+                        parallaxHeader.style.setProperty('opacity', '0', 'important');
+                        
+                        // Mover o background para a posição final
+                        backgroundContainer.style.setProperty('transform', 'translateY(0)', 'important');
+                        
+                        // Animar o logo para sair da tela
+                        logoContainer.style.setProperty('transform', 'translateY(-100vh)', 'important');
+                        logoContainer.style.setProperty('opacity', '0', 'important');
+                        
+                        console.log("Wheel DOWN - Animações aplicadas");
+                    } else if (mainContent.classList.contains('fully-visible')) {
+                        // Se o conteúdo já estiver revelado com margem fixa, permitir rolagem normal
+                        return true;
+                    }
+                } 
+                // Se rolar para cima (deltaY negativo) e estiver próximo do topo
+                else if (e.deltaY < 0 && window.scrollY < 50) {
+                    // Esconder conteúdo apenas se estiver revelado
+                    if (document.documentElement.classList.contains('is-scrolling')) {
+                        e.preventDefault();
+                        mainContent.classList.remove('fully-visible');
+                        setTimeout(() => {
+                            document.documentElement.classList.remove('is-scrolling');
+                            // Aplicar a transformação do conteúdo principal
+                            mainContent.style.transform = 'translateY(calc(100% - 55px))';
+                        }, 50);
+                        
+                        // Mostrar o header (opacidade 1)
+                        parallaxHeader.style.setProperty('opacity', '1', 'important');
+                        
+                        // Mover o background para a posição inicial
+                        backgroundContainer.style.setProperty('transform', 'translateY(30px)', 'important');
+                        
+                        // Retornar o logo à posição original
+                        logoContainer.style.setProperty('transform', 
+                            `translate(var(--logo-offset-x), var(--logo-offset-y)) scale(var(--logo-scale))`, 'important');
+                        logoContainer.style.setProperty('opacity', '1', 'important');
+                        
+                        console.log("Wheel UP - Animações resetadas");
+                    }
+                }
+            }, { passive: false });
+            
+            // Suporte a gestos de toque para mobile
+            mainContent.addEventListener('touchstart', function(e) {
+                touchStartY = e.touches[0].clientY;
+                isDragging = true;
+            }, { passive: true });
+            
+            mainContent.addEventListener('touchmove', function(e) {
+                if (!isDragging) return;
+                
+                touchMoveY = e.touches[0].clientY;
+                const diff = touchStartY - touchMoveY;
+                
+                // Se arrastar para cima, revela o conteúdo
+                if (diff > 50) {
+                    if (!document.documentElement.classList.contains('is-scrolling')) {
+                        document.documentElement.classList.add('is-scrolling');
+                        mainContent.style.transform = 'translateY(0)';
+                        setTimeout(() => {
+                            mainContent.classList.add('fully-visible');
+                        }, 200);
+                    }
+                } 
+                // Se arrastar para baixo quando estiver no topo do conteúdo, esconde o conteúdo
+                else if (diff < -50 && window.scrollY < 10) {
+                    mainContent.classList.remove('fully-visible');
+                    setTimeout(() => {
+                        document.documentElement.classList.remove('is-scrolling');
+                        mainContent.style.transform = 'translateY(calc(100% - 55px))';
+                    }, 50);
+                }
+            }, { passive: true });
+            
+            mainContent.addEventListener('touchend', function() {
+                isDragging = false;
+            }, { passive: true });
+            
+            // Para permitir clicar e revelar
+            mainContent.addEventListener('click', function() {
+                if (!document.documentElement.classList.contains('is-scrolling')) {
+                    toggleMainContent();
+                }
+            });
+            
+            // Efeito de "peek" para chamar atenção
+            setTimeout(() => {
+                mainContent.style.transform = 'translateY(calc(100% - 65px))';
+                
+                setTimeout(() => {
+                    mainContent.style.transform = 'translateY(calc(100% - 55px))';
+                }, 700);
+            }, 1500);
+
+            // Adicionar suporte para arrastar a pílula
+            let indicatorDragging = false;
+            let indicatorStartY = 0;
+
+            scrollIndicator.addEventListener('mousedown', function(e) {
+                indicatorDragging = true;
+                indicatorStartY = e.clientY;
+                e.preventDefault();
+            });
+
+            window.addEventListener('mousemove', function(e) {
+                if (!indicatorDragging) return;
+                
+                const diff = indicatorStartY - e.clientY;
+                
+                // Se arrastar para cima
+                if (diff > 20) {
+                    document.documentElement.classList.add('is-scrolling');
+                    window.scrollTo({ top: 100, behavior: 'smooth' });
+                    indicatorDragging = false;
+                }
+                // Se arrastar para baixo
+                else if (diff < -20) {
+                    document.documentElement.classList.remove('is-scrolling');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    indicatorDragging = false;
+                }
+            });
+
+            window.addEventListener('mouseup', function() {
+                indicatorDragging = false;
+            });
+
+            // Adicionar suporte para teclas de seta
+            window.addEventListener('keydown', function(e) {
+                // Seta para baixo ou espaço para revelar conteúdo
+                if (e.key === 'ArrowDown' || e.key === ' ') {
+                    if (!document.documentElement.classList.contains('is-scrolling')) {
+                        document.documentElement.classList.add('is-scrolling');
+                        window.scrollTo({ top: 100, behavior: 'smooth' });
+                        e.preventDefault();
+                    }
+                }
+                // Seta para cima para esconder conteúdo
+                else if (e.key === 'ArrowUp' && window.scrollY < 10) {
+                    document.documentElement.classList.remove('is-scrolling');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    e.preventDefault();
+                }
+            });
+        });
+    </script>
+</body>
+</html> 
