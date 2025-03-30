@@ -174,7 +174,7 @@ input {
     }
     
     .main-content.fully-visible {
-        transform: translateY(60px) !important; /* Menor margem no topo para mobile */
+        transform: translateY(20px) !important; /* Menor margem no topo para mobile */
     }
     
     .content-wrapper {
