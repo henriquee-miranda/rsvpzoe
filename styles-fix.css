@@ -40,10 +40,11 @@ html.is-scrolling .background-container {
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
-    z-index: 10 !important; /* Aumentado para ficar acima do card */
+    z-index: 5 !important; /* Reduzido para não interferir com a barra de pesquisa */
     background-color: #E2E0DC !important; /* Cor sólida inicial */
     transition: opacity 0.8s cubic-bezier(0.215, 0.610, 0.355, 1.000) !important;
     will-change: opacity !important;
+    pointer-events: none !important; /* Não deve interceptar cliques/toques */
 }
 
 /* Estado de animação do header quando rolar */
@@ -53,7 +54,10 @@ html.is-scrolling .parallax-header {
 
 /* Indicador de rolagem - precisa ficar acima de tudo */
 .scroll-indicator {
+    position: absolute !important;
+    bottom: 250px !important;
     z-index: 20 !important; /* Ajustado para ficar acima do header */
+    pointer-events: auto !important; /* Permitir interação com o indicador */
 }
 
 /* A camada de color-overlay não é mais necessária */
@@ -78,7 +82,7 @@ html.is-scrolling .logo-container {
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
-    z-index: 2 !important; /* Acima do header */
+    z-index: 6 !important; /* Acima do header, mas não interfere com a barra de pesquisa */
     /* Propriedades personalizáveis para ajustar a posição da logo */
     --logo-offset-x: 0px;
     --logo-offset-y: 0px;
@@ -86,6 +90,7 @@ html.is-scrolling .logo-container {
     transform: translate(var(--logo-offset-x), var(--logo-offset-y)) scale(var(--logo-scale)) !important;
     transition: transform 0.8s cubic-bezier(0.215, 0.610, 0.355, 1.000),
                 opacity 0.8s cubic-bezier(0.215, 0.610, 0.355, 1.000) !important;
+    pointer-events: none !important; /* Não deve interceptar cliques/toques */
 }
 
 /* Ajustes do card principal para corrigir a sombra e cantos arredondados */
@@ -108,6 +113,9 @@ html.is-scrolling .logo-container {
     height: 100vh !important; /* Altura fixa para permitir rolagem interna */
     overflow-x: hidden !important; /* Evitar rolagem horizontal */
     will-change: transform !important; /* Otimização para animações */
+    position: relative !important; /* Estabelece contexto de posicionamento */
+    z-index: 7 !important; /* Acima do logo e header */
+    pointer-events: auto !important; /* Garantir que eventos de toque funcionem */
 }
 
 /* Quando estiver completamente visível com margem superior fixa */
@@ -122,4 +130,38 @@ html.is-scrolling .logo-container {
 .container {
     padding-bottom: 100px !important; /* Espaço extra no final para permitir rolagem */
     min-height: 100vh !important; /* Garantir altura mínima para permitir rolagem */
+}
+
+/* Garantir que a interação tátil funcione em dispositivos móveis */
+.main-content, .container, .content-wrapper, .search-box-container, .search-box, input {
+    pointer-events: auto !important;
+}
+
+/* Remover as regras que causam conflitos de interatividade */
+.mobile-search-trigger {
+    display: none !important;
+}
+
+/* Ajustes diretos para a barra de pesquisa sem camadas adicionais */
+.search-box-container {
+    z-index: 10 !important;
+    position: relative !important;
+    pointer-events: auto !important;
+}
+
+.search-box {
+    position: relative !important;
+    z-index: 11 !important;
+    pointer-events: auto !important;
+}
+
+input {
+    position: relative !important;
+    z-index: 12 !important;
+    pointer-events: auto !important;
+}
+
+.suggestions {
+    z-index: 13 !important;
+    pointer-events: auto !important;
 } 

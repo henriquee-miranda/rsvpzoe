@@ -136,13 +136,12 @@ function showSuggestions(suggestions) {
     suggestions.forEach(suggestion => {
         const suggestionElement = document.createElement('div');
         suggestionElement.textContent = suggestion.name;
+        
+        // Usando a função selectSuggestion consistentemente
         suggestionElement.addEventListener('click', () => {
-            document.getElementById('search-input').value = suggestion.name;
-            suggestionsContainer.style.display = 'none';
-            suggestionsContainer.style.opacity = '0';
-            // Exibir detalhes do convidado quando selecionado
-            displayGuestDetails(suggestion);
+            selectSuggestion(suggestion);
         });
+        
         suggestionsContainer.appendChild(suggestionElement);
     });
     
@@ -340,7 +339,7 @@ searchAgainButton.addEventListener('click', () => {
     confirmNoButton.disabled = false;
 });
 
-// Evento de input na barra de busca
+// Evento de input na barra de busca - aqui é onde os usuários pesquisam os convidados
 searchInput.addEventListener('input', (e) => {
     searchGuests(e.target.value);
 });
@@ -352,9 +351,30 @@ document.addEventListener('click', (e) => {
     }
 });
 
-// Inicializar a aplicação
+// Função auxiliar para selecionar uma sugestão
+function selectSuggestion(suggestion) {
+    document.getElementById('search-input').value = suggestion.name;
+    hideAllSuggestions();
+    // Exibir detalhes do convidado quando selecionado
+    displayGuestDetails(suggestion);
+}
+
+// Inicializar a aplicação e adicionar evento simples de clique na barra de pesquisa
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Documento carregado, iniciando aplicação...');
+    
+    // Garantir que a barra de pesquisa seja clicável
+    const searchBox = document.getElementById('search-box') || document.querySelector('.search-box');
+    if (searchBox) {
+        console.log('Configurando eventos de clique para a barra de pesquisa');
+        searchBox.addEventListener('click', function(e) {
+            const searchInput = document.getElementById('search-input');
+            if (searchInput) {
+                searchInput.focus();
+                console.log('Clique na barra de pesquisa - dando foco ao input');
+            }
+        });
+    }
     
     // Verificar se o spinner de carregamento existe
     if (!loadingSpinner) {
@@ -375,13 +395,4 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Inicializar a API
     initGoogleAPI();
-    
-    // Verificar depois de 1 segundo se o spinner está escondido
-    setTimeout(() => {
-        if (loadingSpinner && !loadingSpinner.classList.contains('hidden')) {
-            console.warn('O spinner está visível quando não deveria. Forçando esconder...');
-            loadingSpinner.classList.add('hidden');
-            document.body.classList.remove('loading-active');
-        }
-    }, 1000);
 }); 
