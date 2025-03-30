@@ -40,6 +40,7 @@ body {
     position: relative;
     z-index: 10;
     margin-top: 300px;
+    background-color: rgba(255, 255, 255, 0.85) !important;
 }
 
 h1 {
@@ -52,7 +53,7 @@ h1 {
 
 /* Box da barra de busca */
 .search-box-container {
-    background-color: rgba(255, 255, 255, 0.85);
+    background-color: rgba(255, 255, 255, 0.75);
     padding: 20px 25px;
     border-radius: 20px;
     width: 100%;
@@ -152,29 +153,20 @@ input:focus {
 
 /* Box de informações */
 .info-container {
-    display: flex;
-    flex-direction: column;
-    background-color: rgba(255, 255, 255, 0.85);
-    padding: 25px;
-    border-radius: 10px;
-    width: 100%;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-    color: #333;
-    position: relative;
-    z-index: 50;
+    margin-bottom: 25px !important; /* Espaço antes da barra de busca */
+}
+
+.guest-info:not(.hidden) {
+    margin-top: 25px !important; /* Espaço após a barra de busca */
 }
 
 .guest-info {
-    order: -1;
-    background-color: rgba(255, 255, 255, 0.9);
-    padding: 22px;
-    border-radius: 8px;
-    margin-top: 0;
-    margin-bottom: 25px;
-    transition: all 0.3s ease;
-    color: #333;
+    background-color: rgba(255, 255, 255, 0.75);
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    padding: 20px;
+    margin-bottom: 20px;
+    order: 0;
 }
 
 .guest-info h2 {
@@ -194,6 +186,7 @@ input:focus {
     font-size: 15px;
     line-height: 1.5;
     color: #333;
+    background-color: rgba(255, 255, 255, 0.75);
 }
 
 .event-info p {
@@ -375,7 +368,12 @@ input:focus {
 /* Responsividade */
 @media (max-width: 768px) {
     .content-wrapper {
-        margin-top: 450px;
+        background-color: rgba(255, 255, 255, 0.8);
+        margin-top: 0;
+    }
+    
+    .search-box-container, .guest-info, .event-info {
+        background-color: rgba(255, 255, 255, 0.7);
     }
     
     .search-box-container, .info-container {
@@ -385,6 +383,20 @@ input:focus {
     
     .buttons {
         flex-direction: column;
+        width: 100%;
+    }
+    
+    .btn {
+        margin-bottom: 10px;
+        width: 100%;
+    }
+    
+    .info-container {
+        margin-bottom: 15px !important; /* Menos espaço em mobile */
+    }
+    
+    .guest-info:not(.hidden) {
+        margin-top: 15px !important; /* Menos espaço em mobile */
     }
 }
 
@@ -593,6 +605,7 @@ html.is-scrolling .logo-container {
     pointer-events: auto;
     padding: 0;
     background-color: transparent;
+    padding-bottom: 30px;
 }
 
 /* Container geral */
@@ -636,11 +649,11 @@ h1 {
 
 /* Ajuste para os cards internos */
 .search-box-container, .info-container {
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(255, 255, 255, 0.75);
     border-radius: 15px;
     margin-bottom: 20px;
     width: 100%;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
 }
 
 /* Remover sombras e bordas redundantes */
@@ -651,18 +664,28 @@ h1 {
 }
 
 .guest-info {
-    background-color: rgba(255, 255, 255, 0.9);
+    background-color: rgba(255, 255, 255, 0.75);
     border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
     padding: 20px;
     margin-bottom: 20px;
+    order: 0;
 }
 
 .event-info {
-    background-color: rgba(255, 255, 255, 0.9);
+    background-color: rgba(255, 255, 255, 0.75);
     border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
     padding: 20px;
+}
+
+/* Melhorar contraste do texto em fundos transparentes */
+.event-info p, .guest-info p, .search-instructions {
+    color: #222;
+}
+
+.event-info strong, .event-info b, .guest-info h2 {
+    color: #111;
 }
 
 /* Efeito de animação do scroll indicator */
@@ -685,7 +708,15 @@ h1 {
 /* Pequeno ajuste para dispositivos móveis */
 @media (max-width: 768px) {
     .main-content {
-        transform: translateY(calc(100% - 45px));
+        transform: translateY(calc(100% - 70px));
+    }
+    
+    .info-container {
+        margin-bottom: 15px !important; /* Menos espaço em mobile */
+    }
+    
+    .guest-info:not(.hidden) {
+        margin-top: 15px !important; /* Menos espaço em mobile */
     }
     
     .scroll-indicator {
@@ -722,9 +753,30 @@ html {
     }
 }
 
-/* Remover esta regra conflitante */
-/* Estilo quando o usuário começa a rolar */
-/* html.is-scrolling .background-container {
-    transform: translateY(0);
-    opacity: 1;
-} */ 
+/* Estilos adicionais para mobile */
+@media (max-width: 768px) {
+    .guest-info, .event-info {
+        padding: 15px;
+        margin-bottom: 15px;
+    }
+    
+    .search-box-container {
+        padding: 15px;
+        margin-bottom: 15px;
+    }
+    
+    .event-info p {
+        margin-bottom: 10px;
+    }
+    
+    .event-info .gift-list {
+        padding-left: 25px;
+    }
+}
+
+/* Ajuste para eventos de toque em mobile */
+@media (max-width: 768px) {
+    .scroll-indicator {
+        padding: 10px 20px; /* Aumentar área de toque */
+    }
+} 

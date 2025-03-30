@@ -35,35 +35,12 @@
                 <!-- Título fora dos boxes -->
                 <h1>Confirme sua presença</h1>
                 
-                <!-- Box da barra de busca -->
-                <div class="search-box-container">
-                    <div class="search-box" id="search-box">
-                        <input type="text" id="search-input" placeholder="Digite seu nome...">
-                        <div id="suggestions" class="suggestions"></div>
-                    </div>
-                    <p class="search-instructions">Digite seu nome para confirmar sua presença!</p>
-                    <p class="search-instructions"><strong>Lembre-se de confirmar também para seus acompanhantes 😊</strong></p>
-                </div>
-
-                <!-- Box das informações do evento -->
+                <!-- Box das informações do evento - Agora vem primeiro -->
                 <div class="info-container">
-                    <!-- Informações do convidado - Agora vem primeiro -->
-                    <div id="guest-info" class="guest-info hidden">
-                        <h2 id="guest-name"></h2>
-                        <p id="guest-status" class="status-tag"></p>
-                        <div class="buttons">
-                            <button id="confirm-yes" class="btn btn-confirm">Confirmar Presença</button>
-                            <button id="confirm-no" class="btn btn-decline">Não Poderei Comparecer</button>
-                        </div>
-                        <p id="confirmation-message" class="hidden"></p>
-                        <button id="search-again" class="btn btn-search-again hidden">Buscar Novamente</button>
-                    </div>
-                    
-                    <!-- Informações do evento - Agora vem depois -->
+                    <!-- Informações do evento -->
                     <div class="event-info">
                         <p><span class="emoji">📅</span> <b>Quarta-Feira, 07 de maio</b></p>
-                        <p><span class="emoji">⌚</span> <b>18h -</b> Evite atrasos. Respeite o horário dos bebês.</p>
-                        
+                        <p><span class="emoji">⌚</span> <b>18h</b> Evite atrasos. Respeite o horário dos bebês.</p>
                         <p><span class="emoji">📌</span> <b>Festeja Park</b></p>
                         <p class="address"><a href="https://maps.google.com/?q=Av. Gentil Bittencourt, 883">Av. Gentil Bittencourt, 883</a></p>
                         
@@ -78,6 +55,28 @@
                             <li>Livros educativos 📖</li>
                         </ul>
                     </div>
+                </div>
+                
+                <!-- Box da barra de busca - Agora vem segundo -->
+                <div class="search-box-container">
+                    <div class="search-box" id="search-box">
+                        <input type="text" id="search-input" placeholder="Digite seu nome...">
+                        <div id="suggestions" class="suggestions"></div>
+                    </div>
+                    <p class="search-instructions">Digite seu nome para confirmar sua presença!</p>
+                    <p class="search-instructions"><strong>Lembre-se de confirmar também para seus acompanhantes 😊</strong></p>
+                </div>
+
+                <!-- Informações do convidado - Agora vem por último -->
+                <div id="guest-info" class="guest-info hidden">
+                    <h2 id="guest-name"></h2>
+                    <p id="guest-status" class="status-tag"></p>
+                    <div class="buttons">
+                        <button id="confirm-yes" class="btn btn-confirm">Confirmar Presença</button>
+                        <button id="confirm-no" class="btn btn-decline">Não Poderei Comparecer</button>
+                    </div>
+                    <p id="confirmation-message" class="hidden"></p>
+                    <button id="search-again" class="btn btn-search-again hidden">Buscar Novamente</button>
                 </div>
             </div>
         </div>
@@ -234,7 +233,6 @@
                 if (e.deltaY > 0) {
                     // Revelar conteúdo apenas se ainda não estiver revelado
                     if (!document.documentElement.classList.contains('is-scrolling')) {
-                        e.preventDefault();
                         document.documentElement.classList.add('is-scrolling');
                         
                         // Aplicar a transformação do conteúdo principal
@@ -254,22 +252,18 @@
                         logoContainer.style.setProperty('opacity', '0', 'important');
                         
                         console.log("Wheel DOWN - Animações aplicadas");
-                    } else if (mainContent.classList.contains('fully-visible')) {
-                        // Se o conteúdo já estiver revelado com margem fixa, permitir rolagem normal
-                        return true;
                     }
+                    return; // Remover o else if para simplificar a lógica
                 } 
                 // Se rolar para cima (deltaY negativo) e estiver próximo do topo
                 else if (e.deltaY < 0 && window.scrollY < 50) {
                     // Esconder conteúdo apenas se estiver revelado
                     if (document.documentElement.classList.contains('is-scrolling')) {
-                        e.preventDefault();
                         mainContent.classList.remove('fully-visible');
-                        setTimeout(() => {
-                            document.documentElement.classList.remove('is-scrolling');
-                            // Aplicar a transformação do conteúdo principal
-                            mainContent.style.transform = 'translateY(calc(100% - 55px))';
-                        }, 50);
+                        document.documentElement.classList.remove('is-scrolling');
+                        
+                        // Aplicar a transformação do conteúdo principal
+                        mainContent.style.transform = 'translateY(calc(100% - 55px))';
                         
                         // Mostrar o header (opacidade 1)
                         parallaxHeader.style.setProperty('opacity', '1', 'important');
@@ -304,18 +298,44 @@
                     if (!document.documentElement.classList.contains('is-scrolling')) {
                         document.documentElement.classList.add('is-scrolling');
                         mainContent.style.transform = 'translateY(0)';
+                        
+                        // Esconder o header (opacidade 0) para revelar a imagem de fundo
+                        parallaxHeader.style.setProperty('opacity', '0', 'important');
+                        
+                        // Mover o background para a posição final
+                        backgroundContainer.style.setProperty('transform', 'translateY(0)', 'important');
+                        
+                        // Animar o logo para sair da tela
+                        logoContainer.style.setProperty('transform', 'translateY(-100vh)', 'important');
+                        logoContainer.style.setProperty('opacity', '0', 'important');
+                        
+                        // Adicionar a classe fully-visible após um breve atraso para a animação
                         setTimeout(() => {
                             mainContent.classList.add('fully-visible');
+                            
+                            // Forçar o scroll para o topo do conteúdo
+                            window.scrollTo(0, 0);
                         }, 200);
                     }
                 } 
                 // Se arrastar para baixo quando estiver no topo do conteúdo, esconde o conteúdo
                 else if (diff < -50 && window.scrollY < 10) {
                     mainContent.classList.remove('fully-visible');
-                    setTimeout(() => {
-                        document.documentElement.classList.remove('is-scrolling');
-                        mainContent.style.transform = 'translateY(calc(100% - 55px))';
-                    }, 50);
+                    document.documentElement.classList.remove('is-scrolling');
+                    
+                    // Aplicar a transformação do conteúdo principal
+                    mainContent.style.transform = 'translateY(calc(100% - 55px))';
+                    
+                    // Mostrar o header (opacidade 1)
+                    parallaxHeader.style.setProperty('opacity', '1', 'important');
+                    
+                    // Mover o background para a posição inicial
+                    backgroundContainer.style.setProperty('transform', 'translateY(30px)', 'important');
+                    
+                    // Retornar o logo à posição original
+                    logoContainer.style.setProperty('transform', 
+                        `translate(var(--logo-offset-x), var(--logo-offset-y)) scale(var(--logo-scale))`, 'important');
+                    logoContainer.style.setProperty('opacity', '1', 'important');
                 }
             }, { passive: true });
             
@@ -332,10 +352,19 @@
             
             // Efeito de "peek" para chamar atenção
             setTimeout(() => {
-                mainContent.style.transform = 'translateY(calc(100% - 65px))';
+                // Adicionar classe temporária para o efeito peek
+                mainContent.classList.add('peek-effect');
                 
                 setTimeout(() => {
-                    mainContent.style.transform = 'translateY(calc(100% - 55px))';
+                    // Remover classe após o efeito
+                    mainContent.classList.remove('peek-effect');
+                    
+                    // Em dispositivos móveis, mostrar mais conteúdo
+                    if (window.innerWidth <= 768) {
+                        mainContent.style.transform = 'translateY(calc(100% - 70px))';
+                    } else {
+                        mainContent.style.transform = 'translateY(calc(100% - 55px))';
+                    }
                 }, 700);
             }, 1500);
 

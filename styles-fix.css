@@ -93,24 +93,25 @@ html.is-scrolling .logo-container {
     pointer-events: none !important; /* Não deve interceptar cliques/toques */
 }
 
-/* Ajustes do card principal para corrigir a sombra e cantos arredondados */
+/* Ajustes do card principal para corrigir os cantos arredondados sem sombra */
 .content-wrapper {
     border-radius: 20px !important; /* Cantos arredondados em todos os lados */
-    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.15) !important; /* Sombra ajustada */
-    overflow: visible !important; /* Evita que a sombra seja cortada */
-    margin-bottom: 50px !important; /* Espaço embaixo para mostrar a sombra e o arredondamento */
-    margin-top: 10px !important; /* Pequena margem extra no topo para evitar corte */
+    box-shadow: none !important; /* Remover a sombra completamente */
+    overflow: visible !important; /* Evita que o conteúdo seja cortado */
+    margin-bottom: 50px !important; /* Espaço embaixo */
+    margin-top: 10px !important; /* Pequena margem extra no topo */
     position: relative !important; /* Estabelecer contexto de posicionamento */
-    z-index: 5 !important; /* Aumentado para garantir que fique acima do background */
+    z-index: 5 !important; /* Acima do background */
+    background-color: rgba(255, 255, 255, 0.85) !important; /* Mais transparente */
 }
 
-/* Ajuste do container principal para garantir que a sombra seja visível e respeitar a margem superior */
+/* Ajuste do container principal para simplificar a rolagem */
 .main-content {
-    overflow: visible !important; /* Permite que a sombra seja visível mesmo fora do container */
-    padding-bottom: 50px !important; /* Adiciona espaço para mostrar a sombra inferior */
-    overflow-y: auto !important; /* Permite rolagem do conteúdo interno */
+    overflow: visible !important; /* Permite que o conteúdo seja visível */
+    padding-bottom: 50px !important; /* Adiciona espaço no final */
+    overflow-y: visible !important; /* Permite rolagem da página inteira */
     transition: transform 0.6s cubic-bezier(0.215, 0.610, 0.355, 1.000) !important; /* Transição mais lenta */
-    height: 100vh !important; /* Altura fixa para permitir rolagem interna */
+    height: auto !important; /* Auto-ajuste à altura do conteúdo */
     overflow-x: hidden !important; /* Evitar rolagem horizontal */
     will-change: transform !important; /* Otimização para animações */
     position: relative !important; /* Estabelece contexto de posicionamento */
@@ -120,16 +121,16 @@ html.is-scrolling .logo-container {
 
 /* Quando estiver completamente visível com margem superior fixa */
 .main-content.fully-visible {
-    transform: translateY(80px) !important; /* Margem fixa no topo (ajuste conforme necessário) */
-    max-height: calc(100vh - 80px) !important; /* Altura máxima considerando a margem superior */
-    overflow-y: auto !important; /* Ativa a rolagem interna */
-    box-shadow: none !important; /* Remove a sombra entre o header e o card */
+    transform: translateY(80px) !important; /* Margem fixa no topo */
+    max-height: none !important; /* Remover limite de altura máxima */
+    overflow-y: visible !important; /* Usar a rolagem da página */
+    box-shadow: none !important; /* Sem sombra */
 }
 
 /* Adiciona espaço de rolagem para o conteúdo interno */
 .container {
-    padding-bottom: 100px !important; /* Espaço extra no final para permitir rolagem */
-    min-height: 100vh !important; /* Garantir altura mínima para permitir rolagem */
+    padding-bottom: 100px !important; /* Espaço extra no final */
+    min-height: auto !important; /* Ajustar à altura do conteúdo */
 }
 
 /* Garantir que a interação tátil funcione em dispositivos móveis */
@@ -164,4 +165,31 @@ input {
 .suggestions {
     z-index: 13 !important;
     pointer-events: auto !important;
+}
+
+/* Ajustes específicos para mobile */
+@media (max-width: 768px) {
+    .main-content {
+        transform: translateY(calc(100% - 70px)) !important; /* Aumentado em ~30% (de 55px para 70px) */
+    }
+    
+    .main-content.fully-visible {
+        transform: translateY(60px) !important; /* Menor margem no topo para mobile */
+    }
+    
+    .content-wrapper {
+        background-color: rgba(255, 255, 255, 0.8) !important; /* Ainda mais transparente no mobile */
+    }
+    
+    /* Ajustes para melhorar a experiência de rolagem no mobile */
+    body, html {
+        height: 100% !important;
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+    }
+    
+    /* Ajuste para o efeito "peek" */
+    .main-content.peek-effect {
+        transform: translateY(calc(100% - 80px)) !important; /* Aumentado para o efeito peek */
+    }
 } 

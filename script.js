@@ -231,10 +231,27 @@ function displayGuestInfo(guest) {
     guestStatusElement.className = 'status-tag ' + statusClass;
     guestStatusElement.textContent = statusText;
     
-    // Scroll para o elemento de informações do convidado para garantir visibilidade
+    // Usar uma abordagem mais suave para scroll, especialmente para mobile
     setTimeout(() => {
-        guestInfoElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 100);
+        // Verificar se estamos em um dispositivo móvel
+        const isMobile = window.innerWidth <= 768;
+        
+        if (isMobile) {
+            // Em dispositivos móveis, usar scroll mais simples
+            window.scrollTo({
+                top: guestInfoElement.offsetTop - 80,
+                behavior: 'smooth'
+            });
+        } else {
+            // Em desktop, usar scrollIntoView
+            guestInfoElement.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'center'  // Centralizar na tela em vez de 'start'
+            });
+        }
+        
+        console.log("Scroll para exibir informações do convidado");
+    }, 300); // Delay maior para garantir que os elementos estão renderizados
 }
 
 // Eventos de confirmação de presença
